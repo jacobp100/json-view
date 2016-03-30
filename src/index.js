@@ -1,15 +1,9 @@
+import debounce from 'lodash/debounce';
+
 const textarea = document.getElementById('textarea');
 const output = document.getElementById('output');
 const divider = document.getElementById('divider');
 const error = document.getElementById('error');
-
-const debounce = (delay, fn) => {
-  let timer = null;
-  return () => {
-    clearTimeout(timer);
-    timer = setTimeout(fn, delay);
-  };
-};
 
 const separator = '<span class="separator">,</span>';
 
@@ -50,7 +44,7 @@ const render = value => {
   throw new Error('Unexpected JSON value');
 };
 
-textarea.addEventListener('input', debounce(200, () => {
+textarea.addEventListener('input', debounce(() => {
   const { value } = textarea;
 
   if (value.match(/^\s*$/)) {
@@ -66,7 +60,7 @@ textarea.addEventListener('input', debounce(200, () => {
     error.textContent = e.message;
     error.classList.add('visible');
   }
-}));
+}, 200));
 
 const adjustWidths = e => {
   const { width } = divider.getBoundingClientRect();
