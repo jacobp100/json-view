@@ -61,6 +61,19 @@ body {
   transition: 0.08s all ease-out;
 }
 
+.hidden > .contents {
+  display: none;
+}
+
+.collapse {
+  display: none;
+}
+
+.hidden > .collapse {
+  display: inline;
+  padding-right: 1ch; /* to match .start */
+}
+
 .value {
   display: block;
 }
@@ -96,6 +109,7 @@ body {
 
 .start {
   padding-right: 1ch; /* increase hit-target and make empty array/objects look better */
+  cursor: pointer;
 }
 
 .start:hover, .start:hover ~ .end {

@@ -24,6 +24,9 @@ const arrayEnd = '<span class="end">]</span></span>';
 const objectStart = '<span class="object"><a class="start">{</a>';
 const objectEnd = '<span class="end">}</span></span>';
 
+const wrapContents = elementsHtml =>
+  `<span class="contents">${elementsHtml}</span><span class="collapse">...</span>`;
+
 const render = value => {
   const valueType = typeof value;
   if (valueType === 'number') {
@@ -34,14 +37,14 @@ const render = value => {
     return `<span class="null">${value}</span>`;
   } else if (Array.isArray(value)) {
     const elementsHtml = arrayEntryStart + value.map(render).join(arrayJoiner) + entryEnd;
-    const contents = value.length ? `<span class="contents">${elementsHtml}</span>` : '';
+    const contents = value.length ? wrapContents(elementsHtml) : '';
     return arrayStart + contents + arrayEnd;
   } else if (typeof value === 'object') {
     const renderEntry = key =>
       `<span class="key">"${key}"</span><span class="colon">: </span>${render(value[key])}`;
     const keys = Object.keys(value);
     const elementsHtml = objectEntryStart + keys.map(renderEntry).join(objectJoiner) + entryEnd;
-    const contents = keys.length ? `<span class="contents">${elementsHtml}</span>` : '';
+    const contents = keys.length ? wrapContents(elementsHtml) : '';
     return objectStart + contents + objectEnd;
   }
   throw new Error('Unexpected JSON value');
@@ -65,7 +68,7 @@ textarea.addEventListener('input', debounce(200, () => {
   }
 }));
 
-const adjustWidths = (e) => {
+const adjustWidths = e => {
   const { width } = divider.getBoundingClientRect();
   const dividerPosition = (e.clientX - width / 2) / document.body.clientWidth * 100;
   textarea.style.width = `${dividerPosition}%`;
@@ -78,4 +81,10 @@ divider.addEventListener('mousedown', () => {
 
 document.addEventListener('mouseup', () => {
   document.removeEventListener('mousemove', adjustWidths);
+});
+
+document.addEventListener('click', ({ target }) => {
+  if (target.matches('a.start')) {
+    target.parentElement.classList.toggle('hidden');
+  }
 });
