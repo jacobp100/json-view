@@ -1,0 +1,122 @@
+body {
+  font: 400 10pt/1.4 'Monaco', 'monospace';
+}
+
+/* ids because we reference these elements in JS and I'm lazy */
+#error {
+  display: none;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.5em 1em;
+  background: #DA4453;
+  color: white;
+  z-index: 1;
+}
+
+#error.visible {
+  display: block;
+  animation: fade-in 0.3s ease-out;
+}
+
+#container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+#textarea, #output {
+  box-sizing: border-box;
+  width: 50%;
+  padding: 2em 2em 4em;
+  overflow-y: scroll;
+}
+
+#divider {
+  width: 1em;
+  background: linear-gradient(to left, transparent, 45%, #ccc 0%, 55%, transparent 0%);
+  cursor: ew-resize;
+}
+
+#textarea {
+  font: inherit;
+  border: 0;
+  margin: 0;
+  resize: none;
+  outline: none;
+}
+
+.contents {
+  display: block;
+  padding-left: 2ch;
+  border-left: 1px solid transparent;
+  border-radius: 2ch / 100%;
+  margin-left: -1px;
+  transition: 0.08s all ease-out;
+}
+
+.value {
+  display: block;
+}
+
+.string {
+  color: #859900;
+}
+
+.number {
+  color: #d33682;
+}
+
+.null {
+  color: #839496;
+  font-style: italic;
+}
+
+.key {
+  color: #002b36;
+}
+
+.array, .colon {
+  color: #DA4453;
+}
+
+.object {
+  color: #268bd2;
+}
+
+.separator {
+  color: #657b83;
+}
+
+.start {
+  padding-right: 1ch; /* increase hit-target and make empty array/objects look better */
+}
+
+.start:hover, .start:hover ~ .end {
+  font-weight: bold;
+}
+
+.start:hover + .contents {
+  border-color: currentColor;
+  opacity: 0.5;
+}
+
+.array > .start:hover + .contents * {
+  color: #e26f7a;
+}
+
+.object > .start:hover + .contents * {
+  color: #4ca2df;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+}
