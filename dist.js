@@ -63,8 +63,8 @@
   var objectEnd = '<span class="end">}</span></span>';
   var abruptEnd = '</span>';
 
-  var wrapContents = function wrapContents(elementsHtml) {
-    return '<span class="contents">' + elementsHtml + '</span><span class="collapse">...</span>';
+  var wrapContents = function wrapContents(elementsHtml, placeholder) {
+    return '<span class="contents">' + elementsHtml + '</span><span class="collapse">' + placeholder + '</span>';
   };
 
   var renderObjectKey = function renderObjectKey(key) {
@@ -93,12 +93,12 @@
     },
     array: function array(match, value, isComplete) {
       var elementsHtml = valueStart + value.map(render).join(valueSeparator) + valueEnd;
-      var contents = value.length ? wrapContents(elementsHtml) : '';
+      var contents = value.length ? wrapContents(elementsHtml, value.length) : '';
       return arrayStart + contents + (isComplete ? arrayEnd : abruptEnd);
     },
     object: function object(match, value, isComplete) {
       var elementsHtml = valueStart + value.map(renderObjectEntry).join(valueSeparator) + valueEnd;
-      var contents = value.length ? wrapContents(elementsHtml) : '';
+      var contents = value.length ? wrapContents(elementsHtml, '&hellip;') : '';
       return objectStart + contents + (isComplete ? objectEnd : abruptEnd);
     }
   };

@@ -10,8 +10,8 @@ const objectStart = '<span class="object"><a class="start">{</a>';
 const objectEnd = '<span class="end">}</span></span>';
 const abruptEnd = '</span>';
 
-const wrapContents = elementsHtml =>
-  `<span class="contents">${elementsHtml}</span><span class="collapse">...</span>`;
+const wrapContents = (elementsHtml, placeholder) =>
+  `<span class="contents">${elementsHtml}</span><span class="collapse">${placeholder}</span>`;
 
 const renderObjectKey = key =>
   `<span class="key">"${key}"</span><span class="colon">: </span>`;
@@ -25,12 +25,12 @@ const renderTypes = {
   null: match => `<span class="null">${match}</span>`,
   array(match, value, isComplete) {
     const elementsHtml = valueStart + value.map(render).join(valueSeparator) + valueEnd;
-    const contents = value.length ? wrapContents(elementsHtml) : '';
+    const contents = value.length ? wrapContents(elementsHtml, value.length) : '';
     return arrayStart + contents + (isComplete ? arrayEnd : abruptEnd);
   },
   object(match, value, isComplete) {
     const elementsHtml = valueStart + value.map(renderObjectEntry).join(valueSeparator) + valueEnd;
-    const contents = value.length ? wrapContents(elementsHtml) : '';
+    const contents = value.length ? wrapContents(elementsHtml, '&hellip;') : '';
     return objectStart + contents + (isComplete ? objectEnd : abruptEnd);
   },
 };
