@@ -57,8 +57,12 @@ const parseCommaSeparated = (type, fn, endRe) => text => {
     } else {
       const [err, nextRemainingText, element] = fn(remainingText);
       remainingText = nextRemainingText;
-      value.push(element);
       shouldMatchComma = true;
+
+      if (element) {
+        // Objects and arrays will return a partially completed value, primitives will not
+        value.push(element);
+      }
 
       if (err) {
         return [err, nextRemainingText, output(false)];

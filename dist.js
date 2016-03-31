@@ -207,8 +207,12 @@
           var element = _fn2[2];
 
           remainingText = nextRemainingText;
-          value.push(element);
           shouldMatchComma = true;
+
+          if (element) {
+            // Objects and arrays will return a partially completed value, primitives will not
+            value.push(element);
+          }
 
           if (err) {
             return [err, nextRemainingText, output(false)];
