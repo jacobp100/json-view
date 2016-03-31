@@ -1,49 +1,7 @@
 (function () {
   'use strict';
 
-  var babelHelpers = {};
-
-  babelHelpers.slicedToArray = function () {
-    function sliceIterator(arr, i) {
-      var _arr = [];
-      var _n = true;
-      var _d = false;
-      var _e = undefined;
-
-      try {
-        for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-          _arr.push(_s.value);
-
-          if (i && _arr.length === i) break;
-        }
-      } catch (err) {
-        _d = true;
-        _e = err;
-      } finally {
-        try {
-          if (!_n && _i["return"]) _i["return"]();
-        } finally {
-          if (_d) throw _e;
-        }
-      }
-
-      return _arr;
-    }
-
-    return function (arr, i) {
-      if (Array.isArray(arr)) {
-        return arr;
-      } else if (Symbol.iterator in Object(arr)) {
-        return sliceIterator(arr, i);
-      } else {
-        throw new TypeError("Invalid attempt to destructure non-iterable instance");
-      }
-    };
-  }();
-
-  babelHelpers;
-
-  var debounce = function debounce(fn, delay) {
+  var debounce = function (fn, delay) {
     var timeout = null;
     return function () {
       clearTimeout(timeout);
@@ -63,52 +21,50 @@
   var objectEnd = '<span class="end">}</span></span>';
   var abruptEnd = '</span>';
 
-  var wrapContents = function wrapContents(elementsHtml, placeholder) {
+  var wrapContents = function (elementsHtml, placeholder) {
     return '<span class="contents">' + elementsHtml + '</span><span class="collapse">' + placeholder + '</span>';
   };
 
-  var renderObjectKey = function renderObjectKey(key) {
+  var renderObjectKey = function (key) {
     return '<span class="key">"' + key + '"</span><span class="colon">: </span>';
   };
-  var renderObjectEntry = function renderObjectEntry(_ref) {
-    var _ref2 = babelHelpers.slicedToArray(_ref, 2);
-
-    var key = _ref2[0];
-    var value = _ref2[1];
+  var renderObjectEntry = function (_ref) {
+    var key = _ref[0];
+    var value = _ref[1];
     return renderObjectKey(key) + render(value);
   };
 
   var renderTypes = {
-    number: function number(match) {
+    number: function (match) {
       return '<span class="number">' + match + '</span>';
     },
-    string: function string(match) {
+    string: function (match) {
       return '<span class="string">' + match + '</span>';
     },
-    boolean: function boolean(match) {
+    boolean: function (match) {
       return '<span class="boolean">' + match + '</span>';
     },
-    null: function _null(match) {
+    null: function (match) {
       return '<span class="null">' + match + '</span>';
     },
-    array: function array(match, value, isComplete) {
+    array: function (match, value, isComplete) {
       var elementsHtml = valueStart + value.map(render).join(valueSeparator) + valueEnd;
       var contents = value.length ? wrapContents(elementsHtml, value.length) : '';
       return arrayStart + contents + (isComplete ? arrayEnd : abruptEnd);
     },
-    object: function object(match, value, isComplete) {
+    object: function (match, value, isComplete) {
       var elementsHtml = valueStart + value.map(renderObjectEntry).join(valueSeparator) + valueEnd;
       var contents = value.length ? wrapContents(elementsHtml, '&hellip;') : '';
       return objectStart + contents + (isComplete ? objectEnd : abruptEnd);
     }
   };
 
-  var render = function render(value) {
+  var render = function (value) {
     return renderTypes[value.type](value.match, value.value, value.isComplete);
   };
 
-  var Json = (function (_ref3) {
-    var json = _ref3.json;
+  var Json = (function (_ref2) {
+    var json = _ref2.json;
     return json ? render(json) : '';
   })
 
@@ -143,7 +99,7 @@
   var keySeparatorRe = /^\:/;
   var separatorRe = /^,/;
 
-  var stringTransformer = function stringTransformer(text) {
+  var stringTransformer = function (text) {
     return text.substring(1, text.length - 1);
   };
 
@@ -153,28 +109,28 @@
     return null;
   }]];
 
-  var unexpectedToken = function unexpectedToken(remainingText, value) {
+  var unexpectedToken = function (remainingText, value) {
     return ['Unexpected token: "' + remainingText[0] + '"', remainingText, value];
   };
 
-  var advanceOne = function advanceOne(text) {
+  var advanceOne = function (text) {
     return text.substring(1);
   };
-  var advanceText = function advanceText(text, value) {
+  var advanceText = function (text, value) {
     return text.substring(value.length);
   };
-  var advanceWhitespace = function advanceWhitespace(text) {
+  var advanceWhitespace = function (text) {
     return text.replace(whiteSpace, '');
   };
 
-  var parseCommaSeparated = function parseCommaSeparated(type, fn, endRe) {
+  var parseCommaSeparated = function (type, fn, endRe) {
     return function (text) {
       var remainingText = text;
       var shouldMatchComma = false;
 
       var value = [];
 
-      var output = function output(isComplete) {
+      var output = function (isComplete) {
         return { type: type, value: value, isComplete: isComplete };
       };
 
@@ -200,11 +156,9 @@
         } else {
           var _fn = fn(remainingText);
 
-          var _fn2 = babelHelpers.slicedToArray(_fn, 3);
-
-          var err = _fn2[0];
-          var nextRemainingText = _fn2[1];
-          var element = _fn2[2];
+          var err = _fn[0];
+          var nextRemainingText = _fn[1];
+          var element = _fn[2];
 
           remainingText = nextRemainingText;
           shouldMatchComma = true;
@@ -222,7 +176,7 @@
     };
   };
 
-  var parseObjectEntry = function parseObjectEntry(trimmedText) {
+  var parseObjectEntry = function (trimmedText) {
     var remainingText = trimmedText;
 
     var keyMatch = trimmedText.match(stringRe);
@@ -241,25 +195,21 @@
 
     var _parseValue = parseValue(remainingText);
 
-    var _parseValue2 = babelHelpers.slicedToArray(_parseValue, 3);
-
-    var err = _parseValue2[0];
-    var nextRemainingText = _parseValue2[1];
-    var value = _parseValue2[2];
+    var err = _parseValue[0];
+    var nextRemainingText = _parseValue[1];
+    var value = _parseValue[2];
 
 
     return [err, nextRemainingText, [key, value]];
   };
 
-  var parseValue = function parseValue(text) {
+  var parseValue = function (text) {
     var remainingText = advanceWhitespace(text);
 
     var simpleValue = simpleValueRegexps.reduce(function (value, _ref) {
-      var _ref2 = babelHelpers.slicedToArray(_ref, 3);
-
-      var type = _ref2[0];
-      var regexp = _ref2[1];
-      var transformer = _ref2[2];
+      var type = _ref[0];
+      var regexp = _ref[1];
+      var transformer = _ref[2];
 
       if (value) {
         return value;
@@ -284,14 +234,12 @@
   var matchObject = parseCommaSeparated('object', parseObjectEntry, objectEndRe);
   var matchArray = parseCommaSeparated('array', parseValue, arrayEndRe);
 
-  var parseWithAst = function parseWithAst(text) {
-    var _parseValue3 = parseValue(text);
+  var parseWithAst = function (text) {
+    var _parseValue2 = parseValue(text);
 
-    var _parseValue4 = babelHelpers.slicedToArray(_parseValue3, 3);
-
-    var message = _parseValue4[0];
-    var remainingText = _parseValue4[1];
-    var value = _parseValue4[2];
+    var message = _parseValue2[0];
+    var remainingText = _parseValue2[1];
+    var value = _parseValue2[2];
 
     var error = message ? { message: message, remainingText: remainingText } : null;
     return { error: error, value: value };
@@ -327,7 +275,7 @@
     }
   }, 200));
 
-  var adjustWidths = function adjustWidths(e) {
+  var adjustWidths = function (e) {
     var _divider$getBoundingC = divider.getBoundingClientRect();
 
     var width = _divider$getBoundingC.width;
