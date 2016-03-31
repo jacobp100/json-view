@@ -39,7 +39,9 @@ body {
 }
 
 #divider {
-  width: 1em;
+  position: relative; /* so it appears above the textarea and output */
+  width: 10px;
+  margin: 0 -5px;
   background: linear-gradient(to left, transparent, 45%, #ccc 0%, 55%, transparent 0%);
   cursor: ew-resize;
 }
@@ -56,7 +58,7 @@ body {
   display: block;
   padding-left: 2ch;
   border-left: 1px solid transparent;
-  border-radius: 2ch / 100%;
+  border-radius: 2ch 0 0 2ch / 100% 0 0 100%;
   margin-left: -1px;
   transition: 0.08s all ease-out;
 }
@@ -121,12 +123,8 @@ body {
   opacity: 0.5;
 }
 
-.array > .start:hover + .contents * {
-  color: #e26f7a;
-}
-
-.object > .start:hover + .contents * {
-  color: #4ca2df;
+.start:hover + .contents * {
+  color: inherit;
 }
 
 @keyframes fade-in {
