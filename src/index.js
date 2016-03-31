@@ -1,5 +1,6 @@
 import { debounce } from './util';
-import render from './renderJSON';
+import Output from './components/output';
+import { parseWithAst } from './json';
 
 const textarea = document.getElementById('textarea');
 const output = document.getElementById('output');
@@ -14,11 +15,13 @@ textarea.addEventListener('input', debounce(() => {
     return;
   }
 
-  try {
-    const json = JSON.parse(value);
-    output.innerHTML = render(json);
+  const { error: e, value: json } = parseWithAst(value);
+  const message = e ? e.message : null;
+  const remainingText = e ? e.remainingText : null;
+  output.innerHTML = Output({ json, message, remainingText });
+  if (!e) {
     error.classList.remove('visible');
-  } catch (e) {
+  } else {
     error.textContent = e.message;
     error.classList.add('visible');
   }

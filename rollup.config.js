@@ -14,5 +14,5 @@ export default {
     }),
     babel(),
   ],
-  dest: 'bundle.js',
+  dest: 'dist.js',
 };

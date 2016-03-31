@@ -54,6 +54,15 @@ body {
   outline: none;
 }
 
+.error {
+  margin: 2em 0 1em;
+}
+
+.remaining-text {
+  margin: 1em 0;
+  color: #839496;
+}
+
 .contents {
   display: block;
   padding-left: 2ch;
@@ -88,6 +97,10 @@ body {
   color: #d33682;
 }
 
+.boolean {
+  color: #b58900;
+}
+
 .null {
   color: #839496;
   font-style: italic;
@@ -98,7 +111,7 @@ body {
 }
 
 .array, .colon {
-  color: #DA4453;
+  color: #dc322f;
 }
 
 .object {
