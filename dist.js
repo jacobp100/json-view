@@ -200,7 +200,10 @@
     var value = _parseValue[2];
 
 
-    return [err, nextRemainingText, [key, value]];
+    if (value) {
+      return [err, nextRemainingText, [key, value]];
+    }
+    return [err, nextRemainingText, null];
   };
 
   var parseValue = function (text) {

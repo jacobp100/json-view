@@ -86,7 +86,10 @@ const parseObjectEntry = trimmedText => {
 
   const [err, nextRemainingText, value] = parseValue(remainingText);
 
-  return [err, nextRemainingText, [key, value]];
+  if (value) {
+    return [err, nextRemainingText, [key, value]];
+  }
+  return [err, nextRemainingText, null];
 };
 
 const parseValue = text => {
