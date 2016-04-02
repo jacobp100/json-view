@@ -1,5 +1,5 @@
 body {
-  font: 400 10pt/1.4 'Monaco', 'monospace';
+  font: 400 9pt/1.45 'Monaco', monospace;
 }
 
 /* ids because we reference these elements in JS and I'm lazy */
