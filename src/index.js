@@ -5,7 +5,6 @@ import Output from './components/output';
 const textarea = document.getElementById('textarea');
 const output = document.getElementById('output');
 const divider = document.getElementById('divider');
-const error = document.getElementById('error');
 
 textarea.addEventListener('input', debounce(() => {
   const { value } = textarea;
@@ -20,14 +19,6 @@ textarea.addEventListener('input', debounce(() => {
   const location = e ? e.location : null;
   const remainingText = e ? e.remainingText : null;
   output.innerHTML = Output({ json, message, location, remainingText });
-
-  // if (!e || !value) {
-  //   error.classList.remove('visible');
-  // } else {
-  //   error.textContent = `${message} (line: ${location.line}, column: ${location.column})`;
-  //   error.setAttribute('data-offset', location.offset);
-  //   error.classList.add('visible');
-  // }
 }, 200));
 
 const adjustWidths = e => {
