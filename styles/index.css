@@ -37,10 +37,6 @@ body {
   outline: none;
 }
 
-#output {
-  position: relative;
-}
-
 .error {
   display: block;
   /* Note line-height (and therefore height) is 1.6em */
