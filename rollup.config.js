@@ -12,7 +12,10 @@ export default {
     commonjs({
       include: 'node_modules/**',
     }),
-    babel(),
+    babel({
+      presets: ['es2015-rollup'],
+      babelrc: false,
+    }),
   ],
   dest: 'dist.js',
 };

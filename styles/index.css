@@ -13,7 +13,13 @@ body {
   padding: 0.5em 1em;
   background: #DA4453;
   color: white;
+  text-decoration: none;
   z-index: 1;
+}
+
+#error:hover,
+#error:active {
+  text-decoration: underline;
 }
 
 #error.visible {
@@ -127,16 +133,19 @@ body {
   cursor: pointer;
 }
 
-.start:hover, .start:hover ~ .end {
+.start:hover, .start:hover ~ .end,
+.start:active, .start:active ~ .end {
   font-weight: bold;
 }
 
-.start:hover + .contents {
+.start:hover + .contents,
+.start:active + .contents {
   border-color: currentColor;
   opacity: 0.5;
 }
 
-.start:hover + .contents * {
+.start:hover + .contents *,
+.start:active + .contents * {
   color: inherit;
 }
 
