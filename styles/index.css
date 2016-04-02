@@ -3,29 +3,6 @@ body {
 }
 
 /* ids because we reference these elements in JS and I'm lazy */
-#error {
-  display: none;
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  box-sizing: border-box;
-  width: 100%;
-  padding: 0.5em 1em;
-  background: #DA4453;
-  color: white;
-  text-decoration: none;
-  z-index: 1;
-}
-
-#error:hover,
-#error:active {
-  text-decoration: underline;
-}
-
-#error.visible {
-  display: block;
-  animation: fade-in 0.3s ease-out;
-}
 
 #container {
   position: absolute;
@@ -60,8 +37,17 @@ body {
   outline: none;
 }
 
+#output {
+  position: relative;
+}
+
 .error {
-  margin: 2em 0 1em;
+  display: block;
+  /* Note line-height (and therefore height) is 1.6em */
+  /* Position such that this won't move the JSON content when inserted */
+  margin: -2.6em 0 1em;
+  color: #DA4453;
+  animation: fade-in 0.2s;
 }
 
 .remaining-text {

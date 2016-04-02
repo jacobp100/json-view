@@ -1,5 +1,5 @@
-export default ({ message }) => (
+export default ({ message, location }) => (
   message
-    ? `<div class="error">${message}</div>`
+    ? `<a class="error" data-offset=${location.offset}>${message}</a>`
     : ''
 );

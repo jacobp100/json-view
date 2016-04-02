@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "rollup -c rollup.config.js"
+    "build": "gulp"
   },
   "keywords": [],
   "author": "",
@@ -29,6 +29,6 @@
     "rollup-plugin-node-resolve": "^1.5.0"
   },
   "dependencies": {
-    "json-half-parse": "file:///Users/jacob/Documents/Programs/json-half-parse"
+    "json-half-parse": "0.0.3"
   }
 }

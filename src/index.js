@@ -19,15 +19,15 @@ textarea.addEventListener('input', debounce(() => {
   const message = e ? e.message : null;
   const location = e ? e.location : null;
   const remainingText = e ? e.remainingText : null;
-  output.innerHTML = Output({ json, message, remainingText });
+  output.innerHTML = Output({ json, message, location, remainingText });
 
-  if (!e || !value) {
-    error.classList.remove('visible');
-  } else {
-    error.textContent = `${message} (line: ${location.line}, column: ${location.column})`;
-    error.setAttribute('data-offset', location.offset);
-    error.classList.add('visible');
-  }
+  // if (!e || !value) {
+  //   error.classList.remove('visible');
+  // } else {
+  //   error.textContent = `${message} (line: ${location.line}, column: ${location.column})`;
+  //   error.setAttribute('data-offset', location.offset);
+  //   error.classList.add('visible');
+  // }
 }, 200));
 
 const adjustWidths = e => {
@@ -49,8 +49,8 @@ document.addEventListener('mouseup', () => {
 document.addEventListener('click', ({ target }) => {
   if (target.matches('a.start')) {
     target.parentElement.classList.toggle('hidden');
-  } else if (target === error) {
-    const offset = Number(error.getAttribute('data-offset'));
+  } else if (target.matches('a.error')) {
+    const offset = Number(target.getAttribute('data-offset'));
     textarea.setSelectionRange(offset, offset);
   }
 });
