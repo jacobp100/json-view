@@ -35,6 +35,7 @@ const adjustWidths = e => {
   const dividerPosition = (e.clientX - width / 2) / document.body.clientWidth * 100;
   textarea.style.width = `${dividerPosition}%`;
   output.style.width = `${100 - dividerPosition}%`;
+  window.getSelection().removeAllRanges(); // Dragging the slider causes random selections
 };
 
 divider.addEventListener('mousedown', () => {

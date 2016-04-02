@@ -71,7 +71,7 @@ body {
 
 .contents {
   display: block;
-  padding-left: 2ch;
+  padding-left: 4ch;
   border-left: 1px solid transparent;
   border-radius: 2ch 0 0 2ch / 100% 0 0 100%;
   margin-left: -1px;
