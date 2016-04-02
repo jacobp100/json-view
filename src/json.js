@@ -1,7 +1,7 @@
 /* eslint no-use-before-define: [0] */
 
 const whiteSpace = /^[\s\n\t]+/;
-const stringRe = /^(?:"(?:\\"|[^"])+"|'(?:\\'|[^'])+')/;
+const stringRe = /^"(?:\\\\|\\"|[^"])+"/;
 const numberRe = /^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?(?:[Ee][+-]?[0-9]+)?/;
 const nullRe = /^null/;
 const booleanRe = /^(?:true|false)/;
@@ -12,13 +12,11 @@ const objectEndRe = /^\}/;
 const keySeparatorRe = /^\:/;
 const separatorRe = /^,/;
 
-const stringTransformer = text => text.substring(1, text.length - 1);
-
 const simpleValueRegexps = [
-  ['string', stringRe, stringTransformer],
-  ['number', numberRe, Number],
-  ['boolean', booleanRe, value => value === 'true'],
-  ['null', nullRe, () => null],
+  ['string', stringRe],
+  ['number', numberRe],
+  ['boolean', booleanRe],
+  ['null', nullRe],
 ];
 
 const unexpectedToken = (remainingText, value) =>
@@ -76,7 +74,7 @@ const parseObjectEntry = trimmedText => {
 
   const keyMatch = trimmedText.match(stringRe);
   if (!keyMatch) { return ['Expected a key', trimmedText]; }
-  const key = stringTransformer(keyMatch[0]);
+  const key = JSON.parse(keyMatch[0]); // Double quote string
   remainingText = advanceText(trimmedText, keyMatch[0]);
   remainingText = advanceWhitespace(remainingText);
 
@@ -95,12 +93,14 @@ const parseObjectEntry = trimmedText => {
 const parseValue = text => {
   const remainingText = advanceWhitespace(text);
 
-  const simpleValue = simpleValueRegexps.reduce((value, [type, regexp, transformer]) => {
+  const simpleValue = simpleValueRegexps.reduce((value, [type, regexp]) => {
     if (value) { return value; }
 
     const match = remainingText.match(regexp);
+    // Use JSON.parse for converting JSON primitive values to strings
+    // it'll do a better job than I can (escaping etc)
     return match
-      ? { type, match: match[0], value: transformer(match[0]) }
+      ? { type, match: match[0], value: JSON.parse(match[0]) }
       : null;
   }, null);
 
@@ -123,7 +123,7 @@ const resolveAst = ({ type, value }) => {
   if (type === 'array') {
     return value.map(resolveAst);
   } else if (type === 'object') {
-    value.reduce((out, [key, elementValue]) => {
+    return value.reduce((out, [key, elementValue]) => {
       out[key] = resolveAst(elementValue); // eslint-disable-line
       return out;
     }, {});
@@ -132,7 +132,12 @@ const resolveAst = ({ type, value }) => {
 };
 
 export const parseWithAst = text => {
-  const [message, remainingText, value] = parseValue(text);
+  let [message, remainingText, value] = parseValue(text); // eslint-disable-line
+  const didFinishParsing = message || !remainingText;
+  if (!didFinishParsing) {
+    message = unexpectedToken(remainingText[0]);
+    value = undefined;
+  }
   const error = message ? { message, remainingText } : null;
   return { error, value };
 };

@@ -1,3 +1,13 @@
 {
-  "presets": ["es2015-loose-rollup"]
+  "env": {
+    "development": {
+      "presets": ["es2015-loose-rollup"]
+    },
+    "production": {
+      "presets": ["es2015-loose-rollup"]
+    },
+    "test": {
+      "presets": ["es2015-loose"]
+    }
+  }
 }

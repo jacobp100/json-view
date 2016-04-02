@@ -88,7 +88,7 @@
   /* eslint no-use-before-define: [0] */
 
   var whiteSpace = /^[\s\n\t]+/;
-  var stringRe = /^(?:"(?:\\"|[^"])+"|'(?:\\'|[^'])+')/;
+  var stringRe = /^"(?:\\\\|\\"|[^"])+"/;
   var numberRe = /^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?(?:[Ee][+-]?[0-9]+)?/;
   var nullRe = /^null/;
   var booleanRe = /^(?:true|false)/;
@@ -99,15 +99,7 @@
   var keySeparatorRe = /^\:/;
   var separatorRe = /^,/;
 
-  var stringTransformer = function (text) {
-    return text.substring(1, text.length - 1);
-  };
-
-  var simpleValueRegexps = [['string', stringRe, stringTransformer], ['number', numberRe, Number], ['boolean', booleanRe, function (value) {
-    return value === 'true';
-  }], ['null', nullRe, function () {
-    return null;
-  }]];
+  var simpleValueRegexps = [['string', stringRe], ['number', numberRe], ['boolean', booleanRe], ['null', nullRe]];
 
   var unexpectedToken = function (remainingText, value) {
     return ['Unexpected token: "' + remainingText[0] + '"', remainingText, value];
@@ -183,7 +175,7 @@
     if (!keyMatch) {
       return ['Expected a key', trimmedText];
     }
-    var key = stringTransformer(keyMatch[0]);
+    var key = JSON.parse(keyMatch[0]); // Double quote string
     remainingText = advanceText(trimmedText, keyMatch[0]);
     remainingText = advanceWhitespace(remainingText);
 
@@ -212,14 +204,15 @@
     var simpleValue = simpleValueRegexps.reduce(function (value, _ref) {
       var type = _ref[0];
       var regexp = _ref[1];
-      var transformer = _ref[2];
 
       if (value) {
         return value;
       }
 
       var match = remainingText.match(regexp);
-      return match ? { type: type, match: match[0], value: transformer(match[0]) } : null;
+      // Use JSON.parse for converting JSON primitive values to strings
+      // it'll do a better job than I can (escaping etc)
+      return match ? { type: type, match: match[0], value: JSON.parse(match[0]) } : null;
     }, null);
 
     if (simpleValue) {
@@ -242,8 +235,13 @@
 
     var message = _parseValue2[0];
     var remainingText = _parseValue2[1];
-    var value = _parseValue2[2];
+    var value = _parseValue2[2]; // eslint-disable-line
 
+    var didFinishParsing = message || !remainingText;
+    if (!didFinishParsing) {
+      message = unexpectedToken(remainingText[0]);
+      value = undefined;
+    }
     var error = message ? { message: message, remainingText: remainingText } : null;
     return { error: error, value: value };
   };
