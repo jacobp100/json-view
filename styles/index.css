@@ -1,5 +1,5 @@
 body {
-  font: 400 9pt/1.45 'Monaco', monospace;
+  font: 400 8pt/1.6 'Monaco', monospace;
 }
 
 /* ids because we reference these elements in JS and I'm lazy */
@@ -40,7 +40,7 @@ body {
 #textarea, #output {
   box-sizing: border-box;
   width: 50%;
-  padding: 3em 4em 4em;
+  padding: 6em;
   overflow-y: scroll;
 }
 
