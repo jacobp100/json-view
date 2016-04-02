@@ -40,7 +40,7 @@ body {
 #textarea, #output {
   box-sizing: border-box;
   width: 50%;
-  padding: 2em 2em 4em;
+  padding: 3em 4em 4em;
   overflow-y: scroll;
 }
 
@@ -116,7 +116,11 @@ body {
   color: #002b36;
 }
 
-.array, .colon {
+.colon {
+  color: black;
+}
+
+.array {
   color: #dc322f;
 }
 
