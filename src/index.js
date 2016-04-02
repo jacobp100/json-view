@@ -21,7 +21,7 @@ textarea.addEventListener('input', debounce(() => {
   const remainingText = e ? e.remainingText : null;
   output.innerHTML = Output({ json, message, remainingText });
 
-  if (!e) {
+  if (!e || !value) {
     error.classList.remove('visible');
   } else {
     error.textContent = `${message} (line: ${location.line}, column: ${location.column})`;
