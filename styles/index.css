@@ -8,7 +8,6 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  box-sizing: border-box;
   width: 100%;
   height: 100%;
   display: flex;
@@ -16,7 +15,7 @@ body {
 
 #textarea, #output {
   box-sizing: border-box;
-  width: 50%;
+  flex-basis: 50%;
   padding: 6em;
   overflow-y: scroll;
 }
@@ -138,5 +137,27 @@ body {
 @keyframes fade-in {
   0% {
     opacity: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 10pt;
+  }
+
+  #container {
+    flex-direction: column;
+  }
+
+  #textarea, #output {
+    padding: 3em;
+  }
+
+  #divider {
+    width: auto;
+    height: 50px;
+    margin: -25px 0;
+    background: linear-gradient(to bottom, transparent, 49%, #ccc 0%, 51%, transparent 0%);
+    cursor: ns-resize;
   }
 }

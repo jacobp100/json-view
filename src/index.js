@@ -2,6 +2,7 @@ import { parseWithAst } from 'json-half-parse';
 import { debounce } from './util';
 import Output from './components/output';
 
+const container = document.getElementById('container');
 const textarea = document.getElementById('textarea');
 const output = document.getElementById('output');
 const divider = document.getElementById('divider');
@@ -22,11 +23,20 @@ textarea.addEventListener('input', debounce(() => {
 }, 200));
 
 const adjustWidths = e => {
-  const { width } = divider.getBoundingClientRect();
-  const dividerPosition = (e.clientX - width / 2) / document.body.clientWidth * 100;
-  textarea.style.width = `${dividerPosition}%`;
-  output.style.width = `${100 - dividerPosition}%`;
+  const { clientX, clientY } = ('touches' in e) ? e.touches[0] : e;
+  const { clientWidth, clientHeight } = document.documentElement;
+
+  const isHorizontal = window.getComputedStyle(container).flexDirection === 'row';
+
+  const dividerPosition = isHorizontal
+    ? (clientX / clientWidth * 100)
+    : (clientY / clientHeight * 100);
+
+  textarea.style.flexBasis = `${dividerPosition}%`;
+  output.style.flexBasis = `${100 - dividerPosition}%`;
+
   window.getSelection().removeAllRanges(); // Dragging the slider causes random selections
+  e.preventDefault(); // Stop the refresh dropdown when dragging downwards on Android phone
 };
 
 divider.addEventListener('mousedown', () => {
@@ -35,6 +45,14 @@ divider.addEventListener('mousedown', () => {
 
 document.addEventListener('mouseup', () => {
   document.removeEventListener('mousemove', adjustWidths);
+});
+
+divider.addEventListener('touchstart', () => {
+  document.addEventListener('touchmove', adjustWidths);
+});
+
+document.addEventListener('touchend', () => {
+  document.removeEventListener('touchmove', adjustWidths);
 });
 
 document.addEventListener('click', ({ target }) => {

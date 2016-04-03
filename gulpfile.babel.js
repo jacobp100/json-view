@@ -48,3 +48,15 @@ gulp.task('html', ['js', 'css'], () => {
 });
 
 gulp.task('default', ['html'], () => {});
+
+gulp.task('watch', () => {
+  gulp
+    .watch([
+      'src/index.js',
+      'styles/index.css',
+      'html/index.html',
+    ], ['default'])
+    .on('change', () => {
+      console.log('updated'); // eslint-disable-line
+    });
+});
