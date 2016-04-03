@@ -42,7 +42,13 @@ body {
   /* Position such that this won't move the JSON content when inserted */
   margin: -2.6em 0 1em;
   color: #DA4453;
+  text-decoration: none;
   animation: fade-in 0.2s;
+}
+
+.error:hover {
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .remaining-text {
@@ -159,5 +165,9 @@ body {
     margin: -25px 0;
     background: linear-gradient(to bottom, transparent, 49%, #ccc 0%, 51%, transparent 0%);
     cursor: ns-resize;
+  }
+
+  .error {
+    margin-top: 0; /* It interferes with resizing */
   }
 }
