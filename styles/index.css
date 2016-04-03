@@ -103,6 +103,10 @@ body {
   color: #002b36;
 }
 
+.key.overwritten {
+  text-decoration: line-through;
+}
+
 .colon {
   color: black;
 }

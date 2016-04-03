@@ -1,5 +1,7 @@
 /* eslint no-use-before-define: [0] */
 
+import { keyPairs } from '../util';
+
 const valueStart = '<span class="value">';
 const valueEnd = '</span>';
 const valueSeparator = `<span class="separator">,</span>${valueEnd}${valueStart}`;
@@ -13,10 +15,14 @@ const abruptEnd = '</span>';
 const wrapContents = (elementsHtml, placeholder) =>
   `<span class="contents">${elementsHtml}</span><span class="collapse">${placeholder}</span>`;
 
-const renderObjectKey = key =>
-  `<span class="key">"${key}"</span><span class="colon">: </span>`;
-const renderObjectEntry = ([key, value]) =>
-  renderObjectKey(key) + render(value);
+const renderObjectKey = (key, overwritten) => {
+  const className = overwritten ? 'key overwritten' : 'key';
+  return `<span class="${className}">"${key}"</span><span class="colon">: </span>`;
+};
+const renderObjectEntry = (objectKeys) => ([key, value]) => {
+  const overwritten = objectKeys[key][1] !== value;
+  return renderObjectKey(key, overwritten) + render(value);
+};
 
 const renderTypes = {
   number: match => `<span class="number">${match}</span>`,
@@ -29,7 +35,11 @@ const renderTypes = {
     return arrayStart + contents + (isComplete ? arrayEnd : abruptEnd);
   },
   object(match, value, isComplete) {
-    const elementsHtml = valueStart + value.map(renderObjectEntry).join(valueSeparator) + valueEnd;
+    const objectKeys = keyPairs(value);
+    const elementsHtml =
+      valueStart +
+      value.map(renderObjectEntry(objectKeys)).join(valueSeparator) +
+      valueEnd;
     const contents = value.length ? wrapContents(elementsHtml, '&hellip;') : '';
     return objectStart + contents + (isComplete ? objectEnd : abruptEnd);
   },

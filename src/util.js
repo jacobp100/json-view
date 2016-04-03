@@ -5,3 +5,10 @@ export const debounce = (fn, delay) => {
     timeout = setTimeout(fn, delay);
   };
 };
+
+export const keyPairs = (obj) => (
+  obj.reduce((out, pair) => {
+    out[pair[0]] = pair; // eslint-disable-line
+    return out;
+  }, {})
+);
