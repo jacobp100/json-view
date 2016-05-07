@@ -2,7 +2,7 @@
 
 Simple json viewer.
 
-Use it at http://jacobp100.github.io/json-view/
+## [Use it here](http://jacobp100.github.io/json-view/)
 
 * Read JSON in a prettier format
 * Syntax highlighting
