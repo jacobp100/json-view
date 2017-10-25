@@ -31,7 +31,7 @@ const wrapContents = (elementsHtml, placeholder) =>
 
 const renderObjectKey = (key, overwritten) => {
   const className = overwritten ? 'key overwritten' : 'key';
-  return `<span class="${className}">"${key}"</span><span class="colon">: </span>`;
+  return `<span class="${className}">"${escapeHtml(key)}"</span><span class="colon">: </span>`;
 };
 const renderObjectEntry = (objectKeys) => ([key, value]) => {
   const overwritten = objectKeys[key][1] !== value;
